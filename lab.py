@@ -10,16 +10,24 @@ import time
 import matplotlib.pyplot as plt
 from functools import lru_cache
 
-n=-1
+n = -1
 
 timer=[]
 timer_rec=[]
+fact = [1] * 2
 
-def factrial(x):
-    if x == 1:
-        return 1
-    else:
-        return x * factrial(x - 1)
+lru_cache(maxsize=None)
+def itfact(x):
+    global fact
+    if fact[1] < x:
+        for i in range(fact[1]+1, x+1):
+            fact[0] = fact[0] * i
+    elif fact[1] > x:
+        for i in range(x+1, fact[1]+1):
+            fact[0] = fact[0] // i
+    fact[1] = x
+    return fact[0]
+
 
 #рекурсия
 lru_cache(maxsize=None)
@@ -27,7 +35,7 @@ def rec_f(x):
     if x < 2:
         return 1
     else:
-        return ((-1)**n)*((rec_f(x-1) - rec_g(x-1))/factrial(x*2))
+        return ((-1)**n)*((rec_f(x-1) - rec_g(x-1))/itfact(x*2))
 
 lru_cache(maxsize=None)
 def rec_g(x):
@@ -49,7 +57,7 @@ def it_f(x):
         except ZeroDivisionError:
             #print("Ошибка деления на ноль (float нехватает знаков после запятой)")
             g[1] = 1
-        f[1] = ((-1)**n)*((f[0] - g[0])/factrial(x*2))
+        f[1] = ((-1)**n)*((f[0] - g[0])/itfact((i+1)*2))
         f[0], f[1] = f[1], f[0]
         g[0], g[1] = g[1], g[0]
 
@@ -74,8 +82,7 @@ for i in graf:
           " | Результат рекурсии ->", res,
           " | результат итерации ->", result,
           " | время  рекурсии ->", end_rec-start_rec,
-          " | время  итерации ->",end-start
-    )
+          " | время  итерации ->",end-start)
 
 plt.plot(graf, timer, label='Итерационная функция.')
 plt.plot(graf, timer_rec, label='Рекусионная функция.')
