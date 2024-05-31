@@ -5,7 +5,6 @@
    Результаты сравнительного исследования времени вычисления представить в табличной и графической форме в виде отчета по лабораторной работе.
 16) F(1) = 1; G(1) = 1; F(n) = (-1)n*(F(n–1) – G(n–1))/(2n)!, G(n) = 2*F(n–1) // G(n–1), при n >=2"""
 
-import math
 import time
 import matplotlib.pyplot as plt
 from functools import lru_cache
@@ -17,7 +16,6 @@ timer_rec=[]
 fact = [1] * 2
 
 one = -1
-oneit = -1
 
 lru_cache(maxsize=None)
 def itfact(x):
@@ -54,17 +52,17 @@ def rec_g(x):
             return 1
 
 def it_f(x):
-    global oneit
+    global one
     f = [1, 1]
     g = [1, 1]
     for i in range(1,x+1):
-        oneit *= -1
+        one *= -1
         try:
             g[1] = 2 * f[0] // g[0]
         except ZeroDivisionError:
             #print("Ошибка деления на ноль (float нехватает знаков после запятой)")
             g[1] = 1
-        f[1] = oneit*((f[0] - g[0])/itfact((i+1)*2))
+        f[1] = one*((f[0] - g[0])/itfact((i+1)*2))
         f[0], f[1] = f[1], f[0]
         g[0], g[1] = g[1], g[0]
 
@@ -83,7 +81,7 @@ for i in graf:
     end = time.time()
     timer.append(end-start)
     start_rec = time.time()
-    oneit = -1
+    one = -1
     res = rec_f(i)
     end_rec = time.time()
     timer_rec.append(end_rec-start_rec)
