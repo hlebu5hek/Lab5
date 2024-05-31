@@ -16,6 +16,9 @@ timer=[]
 timer_rec=[]
 fact = [1] * 2
 
+one = -1
+oneit = -1
+
 lru_cache(maxsize=None)
 def itfact(x):
     global fact
@@ -32,10 +35,12 @@ def itfact(x):
 #рекурсия
 lru_cache(maxsize=None)
 def rec_f(x):
+    global one
+    one *= -1
     if x < 2:
         return 1
     else:
-        return ((-1)**n)*((rec_f(x-1) - rec_g(x-1))/itfact(x*2))
+        return one*((rec_f(x-1) - rec_g(x-1))/itfact(x*2))
 
 lru_cache(maxsize=None)
 def rec_g(x):
@@ -49,15 +54,17 @@ def rec_g(x):
             return 1
 
 def it_f(x):
+    global oneit
     f = [1, 1]
     g = [1, 1]
     for i in range(1,x+1):
+        oneit *= -1
         try:
             g[1] = 2 * f[0] // g[0]
         except ZeroDivisionError:
             #print("Ошибка деления на ноль (float нехватает знаков после запятой)")
             g[1] = 1
-        f[1] = ((-1)**n)*((f[0] - g[0])/itfact((i+1)*2))
+        f[1] = oneit*((f[0] - g[0])/itfact((i+1)*2))
         f[0], f[1] = f[1], f[0]
         g[0], g[1] = g[1], g[0]
 
@@ -71,10 +78,12 @@ graf = list(range(1, n+1))
 
 for i in graf:
     start = time.time()
+    one = -1 if i % 2 == 0 else 1
     result = it_f(i)
     end = time.time()
     timer.append(end-start)
     start_rec = time.time()
+    oneit = -1
     res = rec_f(i)
     end_rec = time.time()
     timer_rec.append(end_rec-start_rec)
